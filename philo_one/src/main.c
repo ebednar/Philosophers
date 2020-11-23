@@ -1,50 +1,53 @@
-#include "philosophers.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <pthread.h>
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/22 18:12:12 by ebednar           #+#    #+#             */
+/*   Updated: 2020/11/22 20:08:44 by ebednar          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-typedef struct s_env
-{
-	int	philos_numb;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int number_of_eat;
-} t_env;
+#include "philo_one.h"
 
-typedef struct s_philo
+void	philo_sleep(t_philo *philo)
 {
-	int numb;
-	int	philos_numb;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int number_of_eat;
-} t_philo;
-
-void	sleep(t_env *env)
-{
-	printf(" is sleeping\n");
-	usleep(env->time_to_sleep);
+	print_message(philo, " is sleeping");
+	usleep(philo->time_to_sleep * 1000000);
 }
 
-void	think(t_env *env)
+void	philo_think(t_philo *philo)
 {
-	printf(" is thinking\n");
+	print_message(philo, " is thinking");
 }
 
-void	eat(t_env *env)
+void	philo_eat(t_philo *philo)
 {
-	printf(" is eating\n");
-	usleep(env->time_to_eat);
+	if (philo->numb == 0)
+		pthread_mutex_lock(&(philo->env->forks[philo->philos_numb - 1]));
+	else
+		pthread_mutex_lock(&(philo->env->forks[philo->numb - 1]));
+	pthread_mutex_lock(&(philo->env->forks[philo->numb]));
+	print_message(philo, " has taken a fork");
+	print_message(philo, " is eating");
+	usleep(philo->time_to_eat * 1000000);
+	if (philo->numb == 0)
+		pthread_mutex_unlock(&(philo->env->forks[philo->philos_numb - 1]));
+	else
+		pthread_mutex_unlock(&(philo->env->forks[philo->numb - 1]));
+	pthread_mutex_unlock(&(philo->env->forks[philo->numb]));
 }
 
-void *philo_cycle(void *philo_ptr)
+void	*philo_cycle(void *philo_ptr)
 {
 	t_philo	*philo;
 	philo = philo_ptr;
+	philo_eat(philo);
+	philo_sleep(philo);
+	philo_think(philo);
+	return (0);
 }
 
 void	set_philos(t_env *env, t_philo *philos)
@@ -54,27 +57,29 @@ void	set_philos(t_env *env, t_philo *philos)
 	i = -1;
 	while (++i < env->philos_numb)
 	{
-		philos[i]->numb = i;
-		philos[i]->philos_numb = env->philos_numb;
-		philos[i]->time_to_die = env->time_to_die;
-		philos[i]->time_to_eat = env->time_to_eat;
-		philos[i]->time_to_sleep = env->time_to_sleep;
-		philos[i]->number_of_eat = env->number_of_eat;
+		philos[i].numb = i;
+		philos[i].philos_numb = env->philos_numb;
+		philos[i].time_to_die = env->time_to_die;
+		philos[i].time_to_eat = env->time_to_eat;
+		philos[i].time_to_sleep = env->time_to_sleep;
+		philos[i].number_of_eat = env->number_of_eat;
+		philos[i].env = env;
+		pthread_mutex_init(&env->forks[i], NULL);
 	}
 }
 
 int		start_threads(t_env *env, t_philo* philos)
 {
-	pthread_t*	threads;
+	pthread_t	*threads;
 	int			i;
 
-	if (!(threads = (pthread_t*)malloc(env.philos_numb * sizeof(pthread_t))))
+	if (!(threads = (pthread_t*)malloc(env->philos_numb * sizeof(pthread_t))))
 	{
-		printf("mem allocation error\n")
+		printf("mem allocation error\n");
 			return (1);
 	}
 	i = -1;
-	while (++i < env.philos_numb)
+	while (++i < env->philos_numb)
 	{
 		if (pthread_create(&threads[i], NULL, philo_cycle, &philos[i]) != 0)
 		{
@@ -83,9 +88,10 @@ int		start_threads(t_env *env, t_philo* philos)
 		}
 	}
 	i = -1;
-	while (++i < env.philos_numb)
-		pthread_join(&threads[i], NULL);
+	while (++i < env->philos_numb)
+		pthread_join(threads[i], NULL);
 	free(threads);
+	return (0);
 }
 
 int		main(int argc, char **argv)
@@ -93,7 +99,8 @@ int		main(int argc, char **argv)
 	t_env		env;
 	t_philo		*philos;
 
-	if (argc != 5 || argc != 6)
+	env.start_time = time_stamp();
+	if (argc != 5 && argc != 6)
 	{
 		printf("wrong number of args: number_of_philosophers, time_to_die, time_to_eat, time_to_sleep, [number_of_times_each_philosopher_must_eat]\n");
 		return (0);
@@ -108,11 +115,21 @@ int		main(int argc, char **argv)
 		env.number_of_eat = -1;
 	if (!(philos = (t_philo *)malloc(env.philos_numb * sizeof(t_philo))))
 	{
-		printf("mem allocation error\n")
+		printf("mem allocation error\n");
+		return (1);
+	}
+	if (!(env.forks = (pthread_mutex_t *)malloc((env.philos_numb) * sizeof(pthread_mutex_t))))
+	{
+		printf("mem allocation error\n");
 		return (1);
 	}
 	set_philos(&env, philos);
+	pthread_mutex_init(&env.output, NULL);
 	start_threads(&env, philos);
 	free(philos);
+	int	i;
+	i = -1;
+	while (++i < env.philos_numb)
+		pthread_mutex_destroy(&env.forks[i]);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 18:12:04 by ebednar           #+#    #+#             */
-/*   Updated: 2020/11/22 19:59:22 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/11/23 20:54:17 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <pthread.h>
-# include <stdio.h>
 
 typedef struct s_env
 {
@@ -27,6 +26,7 @@ typedef struct s_env
 	int		time_to_eat;
 	int		time_to_sleep;
 	int		number_of_eat;
+	int		running;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	output;
 }			t_env;
@@ -40,9 +40,12 @@ typedef struct s_philo
 	int		time_to_eat;
 	int		time_to_sleep;
 	int		number_of_eat;
+	int		eating;
 }			t_philo;
 
+void	*philo_cycle(void *philo_ptr);
 int		time_stamp();
+int		precise_time();
 int		ft_atoi(const char *str);
 void	ft_putchar(char c);
 void	ft_putstr(char const *s);

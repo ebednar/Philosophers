@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   timer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/22 19:58:55 by ebednar           #+#    #+#             */
-/*   Updated: 2020/11/23 20:48:36 by ebednar          ###   ########.fr       */
+/*   Created: 2020/11/23 20:36:23 by ebednar           #+#    #+#             */
+/*   Updated: 2020/11/23 20:38:30 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-void	print_message(t_philo *philo, char *str)
+int	time_stamp()
 {
-	pthread_mutex_lock(&(philo->env->output));
-	ft_putnbr(time_stamp() - philo->env->start_time);
-	ft_putchar(' ');
-	ft_putnbr(philo->numb + 1);
-	ft_putendl(str);
-	pthread_mutex_unlock(&(philo->env->output));
+	static struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+int	precise_time()
+{
+	static struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000000 + tv.tv_usec);
 }

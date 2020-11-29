@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 static void	philo_sleep(t_philo *philo)
 {
@@ -25,20 +25,12 @@ static void	philo_think(t_philo *philo)
 
 static void	philo_take_fork(t_philo *philo)
 {
-	if (philo->numb == 0)
-	{
-		pthread_mutex_lock(&(philo->env->forks[philo->numb]));
-		print_message(philo, " has taken a fork");
-		pthread_mutex_lock(&(philo->env->forks[philo->philos_numb - 1]));
-		print_message(philo, " has taken a fork");
-	}
-	else
-	{
-		pthread_mutex_lock(&(philo->env->forks[philo->numb - 1]));
-		print_message(philo, " has taken a fork");
-		pthread_mutex_lock(&(philo->env->forks[philo->numb]));
-		print_message(philo, " has taken a fork");
-	}
+	sem_wait(philo->env->can_take);
+	sem_wait(philo->env->forks);
+	print_message(philo, " has taken a fork");
+	sem_wait(philo->env->forks);
+	print_message(philo, " has taken a fork");
+	sem_post(philo->env->can_take);
 }
 
 static void	philo_eat(t_philo *philo)
@@ -49,16 +41,8 @@ static void	philo_eat(t_philo *philo)
 	usleep(philo->time_to_eat);
 	philo->eating = 0;
 	philo->number_of_eat--;
-	if (philo->numb == 0)
-	{
-		pthread_mutex_unlock(&(philo->env->forks[philo->philos_numb - 1]));
-		pthread_mutex_unlock(&(philo->env->forks[philo->numb]));
-	}
-	else
-	{
-		pthread_mutex_unlock(&(philo->env->forks[philo->numb]));
-		pthread_mutex_unlock(&(philo->env->forks[philo->numb - 1]));
-	}
+	sem_post(philo->env->forks);
+	sem_post(philo->env->forks);
 }
 
 void		*philo_cycle(void *philo_ptr)
@@ -77,6 +61,8 @@ void		*philo_cycle(void *philo_ptr)
 	{
 		philo_think(philo);
 		philo_eat(philo);
+		if (!philo->env->running)
+			return (0);
 		philo_sleep(philo);
 	}
 	return (0);

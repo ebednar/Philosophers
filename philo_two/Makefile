@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philo_one
+NAME = philo_two
 SRC =	./src/main.c \
 		./src/cycle.c \
 		./src/observer.c \

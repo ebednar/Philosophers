@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_three.h"
 
 void    *obsever_cycle(void *philo_ptr)
 {

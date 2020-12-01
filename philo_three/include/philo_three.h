@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <semaphore.h>
 
 typedef struct s_env
 {
@@ -28,8 +29,9 @@ typedef struct s_env
 	int				number_of_eat;
 	int				running;
 	int				philos_finished;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	output;
+	sem_t			*forks;
+	sem_t			*can_take;
+	sem_t			*output;
 }			t_env;
 
 typedef struct s_philo

@@ -10,14 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_three.h"
 
 void	print_message(t_philo *philo, char *str)
 {
-	pthread_mutex_lock(&(philo->env->output));
+	if (!philo->env->running)
+		return ;
+	sem_wait(philo->env->output);
 	ft_putnbr(time_stamp() - philo->env->start_time);
 	ft_putchar(' ');
 	ft_putnbr(philo->numb + 1);
 	ft_putendl(str);
-	pthread_mutex_unlock(&(philo->env->output));
+	sem_post(philo->env->output);
 }

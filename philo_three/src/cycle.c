@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 20:08:30 by ebednar           #+#    #+#             */
-/*   Updated: 2020/11/23 22:04:43 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/02 22:59:16 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,16 @@ void		*philo_cycle(void *philo_ptr)
 	t_philo     *philo;
 
 	philo = philo_ptr;
-	if (pthread_create(&obs, NULL, obsever_cycle, philo) != 0)
+	if (pthread_create(&obs, NULL, observer_cycle, philo) != 0)
 	{
 		ft_putendl("pthread creation error");
 		return (0);
 	}
 	pthread_detach(obs);
-	while (philo->env->running)
+	while (1)
 	{
 		philo_think(philo);
 		philo_eat(philo);
-		if (!philo->env->running)
-			return (0);
 		philo_sleep(philo);
 	}
 	return (0);

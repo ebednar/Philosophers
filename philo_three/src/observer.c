@@ -1,6 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   observer.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/02 22:47:10 by ebednar           #+#    #+#             */
+/*   Updated: 2020/12/02 23:12:43 by ebednar          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_three.h"
 
-void    *obsever_cycle(void *philo_ptr)
+void	*observer_eat_count(void *env_ptr)
+{
+	t_env	*env;
+	int 	i;
+
+	env = env_ptr;
+	i = 0;
+	while (1)
+	{
+		sem_wait(env->philos_finished);
+		i++;
+		if (i == env->philos_numb)
+		{
+			sem_post(env->running);
+			return (0);
+		}
+	}
+	return (0);
+}
+
+void    *observer_cycle(void *philo_ptr)
 {
 	t_philo *philo;
 	int		old_time;
@@ -9,25 +41,24 @@ void    *obsever_cycle(void *philo_ptr)
 
 	philo = philo_ptr;
 	old_time = precise_time();
-	while (philo->env->running)
+	while (1)
 	{
 		current_time = precise_time();
 		delta_time = current_time - old_time;
 		old_time = current_time;
 		if (!philo->eating)
 			philo->time_to_die -= delta_time;
-		if (philo->number_of_eat == 0)
-		{
-			philo->env->philos_finished++;
-			philo->number_of_eat--;
-		}
-		if (philo->time_to_die == 0)
+		if (philo->time_to_die <= 0)
 		{
 			print_message(philo, " died");
-			philo->env->running = 0;
+			sem_post(philo->env->running);
+			return (0);
 		}
-		if (philo->env->philos_finished == philo->env->philos_numb)
-			philo->env->running = 0;
+		if (philo->number_of_eat == 0)
+		{
+			sem_post(philo->env->philos_finished);
+			philo->number_of_eat--;
+		}
 	}
 	return (0);
 }

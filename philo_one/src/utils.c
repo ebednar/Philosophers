@@ -12,7 +12,7 @@
 
 #include "philo_one.h"
 
-int		ft_atoi(const char *str)
+int			ft_atoi(const char *str)
 {
 	int			i;
 	long long	res;
@@ -41,7 +41,7 @@ int		ft_atoi(const char *str)
 	return (res * sign);
 }
 
-void	ft_putchar(char c)
+void		ft_putchar(char c)
 {
 	write(1, &c, 1);
 }

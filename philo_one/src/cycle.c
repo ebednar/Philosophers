@@ -46,6 +46,7 @@ static void	philo_eat(t_philo *philo)
 	philo_take_fork(philo);
 	philo->eating = 1;
 	print_message(philo, " is eating");
+	philo->time_left = philo->time_to_die;
 	usleep(philo->time_to_eat);
 	philo->eating = 0;
 	philo->number_of_eat--;

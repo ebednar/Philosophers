@@ -37,6 +37,7 @@ static void	set_philos(t_env *env, t_philo *philos)
 		philos[i].time_to_eat = env->time_to_eat * 1000;
 		philos[i].time_to_sleep = env->time_to_sleep * 1000;
 		philos[i].number_of_eat = env->number_of_eat;
+		philos[i].time_left = philos[i].time_to_die;
 		philos[i].eating = 0;
 		philos[i].env = env;
 		pthread_mutex_init(&env->forks[i], NULL);

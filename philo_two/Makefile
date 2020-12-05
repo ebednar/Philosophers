@@ -16,7 +16,8 @@ SRC =	./src/main.c \
 		./src/observer.c \
 		./src/timer.c \
 		./src/utils.c \
-		./src/print.c
+		./src/print.c \
+		./src/sem_init.c
 OBJECTS = $(SRC:.c=.o)
 FLAGS = -Wall -Wextra -Werror
 INCLUDES = -I include

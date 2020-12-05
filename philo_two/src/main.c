@@ -36,6 +36,7 @@ static void	set_philos(t_env *env, t_philo *philos)
 		philos[i].time_to_eat = env->time_to_eat * 1000;
 		philos[i].time_to_sleep = env->time_to_sleep * 1000;
 		philos[i].number_of_eat = env->number_of_eat;
+		philos[i].time_left = philos[i].time_to_die;
 		philos[i].eating = 0;
 		philos[i].env = env;
 	}
@@ -83,12 +84,6 @@ static int	read_input(int argc, char **argv, t_env *env)
 	env->time_to_die = ft_atoi(argv[2]);
 	env->time_to_eat = ft_atoi(argv[3]);
 	env->time_to_sleep = ft_atoi(argv[4]);
-	sem_unlink("/forks");
-	if (!(env->forks = sem_open("/forks", O_CREAT | O_EXCL, S_IRWXU, env->philos_numb)))
-	{
-		ft_putendl("semathore open fail");
-		return (1);
-	};
 	env->running = 1;
 	env->philos_finished = 0;
 	if (argc == 6)
@@ -112,19 +107,8 @@ int			main(int argc, char **argv)
 		return (-1);
 	}
 	set_philos(&env, philos);
-	sem_unlink("/output");
-	if (!(env.output = sem_open("/output", O_CREAT, S_IRWXU, 1)))
-	{
-		ft_putendl("semathore open fail");
-		return (1);
-	};
-	sem_unlink("/can_take");
-	if (!(env.can_take = sem_open("/can_take", O_CREAT, S_IRWXU, 1)))
-	{
-		ft_putendl("semathore open fail");
-		return (1);
-	};
-	start_threads(&env, philos);
+	if (!semaphore_init(&env))
+		start_threads(&env, philos);
 	free_mem(&env, philos);
 	return (0);
 }

@@ -47,8 +47,8 @@ void    *observer_cycle(void *philo_ptr)
 		delta_time = current_time - old_time;
 		old_time = current_time;
 		if (!philo->eating)
-			philo->time_to_die -= delta_time;
-		if (philo->time_to_die <= 0)
+			philo->time_left -= delta_time;
+		if (philo->time_left <= 0)
 		{
 			print_message(philo, " died");
 			sem_post(philo->env->running);

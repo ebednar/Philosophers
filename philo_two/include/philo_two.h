@@ -21,17 +21,17 @@
 
 typedef struct s_env
 {
-	int				start_time;
-	int				philos_numb;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				number_of_eat;
-	int				running;
-	int				philos_finished;
-	sem_t			*forks;
-	sem_t			*can_take;
-	sem_t			*output;
+	int		start_time;
+	int		philos_numb;
+	int		time_to_die;
+	int		time_to_eat;
+	int		time_to_sleep;
+	int		number_of_eat;
+	int		running;
+	int		philos_finished;
+	sem_t	*forks;
+	sem_t	*can_take;
+	sem_t	*output;
 }			t_env;
 
 typedef struct s_philo
@@ -43,6 +43,7 @@ typedef struct s_philo
 	int		time_to_eat;
 	int		time_to_sleep;
 	int		number_of_eat;
+	int		time_left;
 	int		eating;
 }			t_philo;
 
@@ -56,5 +57,5 @@ void	ft_putstr(char const *s);
 void	ft_putendl(char const *s);
 void	ft_putnbr(int n);
 void	print_message(t_philo *philo, char *str);
-
+int		semaphore_init(t_env *env);
 #endif

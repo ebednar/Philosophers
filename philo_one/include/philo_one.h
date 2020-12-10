@@ -18,31 +18,32 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_env
+typedef struct		s_env
 {
-	int				start_time;
+int					start_time;
+int					philos_numb;
+int					time_to_die;
+int					time_to_eat;
+int					time_to_sleep;
+int					number_of_eat;
+int					running;
+int					philos_finished;
+pthread_mutex_t		*forks;
+pthread_mutex_t		output;
+}					t_env;
+
+typedef struct		s_philo
+{
+	t_env			*env;
+	int				numb;
 	int				philos_numb;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_eat;
-	int				running;
-	int				philos_finished;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	output;
-}			t_env;
-
-typedef struct s_philo
-{
-	t_env	*env;
-	int		numb;
-	int		philos_numb;
-	int		time_to_die;
-	int		time_to_eat;
-	int		time_to_sleep;
-	int		number_of_eat;
-	int		eating;
-}			t_philo;
+	int				eating;
+	pthread_mutex_t	philo_m;
+}					t_philo;
 
 void	*philo_cycle(void *philo_ptr);
 void    *obsever_cycle(void *philo_ptr);

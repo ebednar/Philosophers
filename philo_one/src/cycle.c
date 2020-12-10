@@ -44,9 +44,11 @@ static void	philo_take_fork(t_philo *philo)
 static void	philo_eat(t_philo *philo)
 {
 	philo_take_fork(philo);
+	pthread_mutex_lock(&philo->philo_m);
 	philo->eating = 1;
 	print_message(philo, " is eating");
 	philo->time_left = philo->time_to_die;
+	pthread_mutex_unlock(&philo->philo_m);
 	usleep(philo->time_to_eat);
 	philo->eating = 0;
 	philo->number_of_eat--;

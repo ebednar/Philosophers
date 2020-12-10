@@ -4,6 +4,7 @@ static void	check_end(t_philo *philo)
 {
 	if (philo->time_left <= 0)
 	{
+		pthread_mutex_lock(&philo->philo_m);
 		print_message(philo, " died");
 		philo->env->running = 0;
 	}

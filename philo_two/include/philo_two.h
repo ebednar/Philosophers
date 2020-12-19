@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 18:12:04 by ebednar           #+#    #+#             */
-/*   Updated: 2020/11/23 20:54:17 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/19 19:30:18 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	int		number_of_eat;
 	int		time_left;
 	int		eating;
+	sem_t	*philo_s;
 }			t_philo;
 
 void	*philo_cycle(void *philo_ptr);

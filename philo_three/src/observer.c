@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 22:47:10 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/02 23:12:43 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/19 21:50:08 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	*observer_eat_count(void *env_ptr)
 {
 	t_env	*env;
-	int 	i;
+	int		i;
 
 	env = env_ptr;
 	i = 0;
@@ -32,7 +32,7 @@ void	*observer_eat_count(void *env_ptr)
 	return (0);
 }
 
-void    *observer_cycle(void *philo_ptr)
+void	*observer_cycle(void *philo_ptr)
 {
 	t_philo *philo;
 	int		old_time;
@@ -50,12 +50,14 @@ void    *observer_cycle(void *philo_ptr)
 			philo->time_left -= delta_time;
 		if (philo->time_left <= 0)
 		{
+			sem_wait(philo->philo_s);
 			print_message(philo, " died");
 			sem_post(philo->env->running);
 			return (0);
 		}
 		if (philo->number_of_eat == 0)
 		{
+			sem_wait(philo->philo_s);
 			sem_post(philo->env->philos_finished);
 			philo->number_of_eat--;
 		}

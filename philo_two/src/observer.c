@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   observer.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/19 23:01:46 by ebednar           #+#    #+#             */
+/*   Updated: 2020/12/19 23:01:58 by ebednar          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_two.h"
 
 static void	check_end(t_philo *philo)
 {
 	if (philo->time_left <= 0)
 	{
+		sem_wait(philo->philo_s);
 		print_message(philo, " died");
 		philo->env->running = 0;
 	}
@@ -11,7 +24,7 @@ static void	check_end(t_philo *philo)
 		philo->env->running = 0;
 }
 
-void    *obsever_cycle(void *philo_ptr)
+void		*obsever_cycle(void *philo_ptr)
 {
 	t_philo *philo;
 	int		old_time;

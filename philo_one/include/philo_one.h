@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 18:12:04 by ebednar           #+#    #+#             */
-/*   Updated: 2020/11/23 20:54:17 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/19 19:32:26 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct		s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_eat;
+	int				time_left;
 	int				eating;
 	pthread_mutex_t	philo_m;
 }					t_philo;

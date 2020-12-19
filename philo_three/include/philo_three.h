@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 18:12:04 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/02 23:03:12 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/19 21:27:07 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_philo
 	int		time_left;
 	int		eating;
 	int		pid;
+	sem_t	*philo_s;
 }			t_philo;
 
 void	*philo_cycle(void *philo_ptr);

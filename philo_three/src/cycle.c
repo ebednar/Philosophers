@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 20:08:30 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/02 22:59:16 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/19 21:47:11 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ static void	philo_take_fork(t_philo *philo)
 static void	philo_eat(t_philo *philo)
 {
 	philo_take_fork(philo);
+	sem_wait(philo->philo_s);
 	philo->eating = 1;
 	print_message(philo, " is eating");
 	philo->time_left = philo->time_to_die;
+	sem_post(philo->philo_s);
 	usleep(philo->time_to_eat);
 	philo->eating = 0;
 	philo->number_of_eat--;

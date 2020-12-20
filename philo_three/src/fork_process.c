@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   timer.c                                            :+:      :+:    :+:   */
+/*   fork_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/23 20:36:23 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/20 14:05:21 by ebednar          ###   ########.fr       */
+/*   Created: 2020/12/20 14:49:30 by ebednar           #+#    #+#             */
+/*   Updated: 2020/12/20 19:43:00 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_three.h"
 
-int	time_stamp(void)
+void	fork_process(t_env *env, t_philo *philos)
 {
-	static struct timeval	tv;
+	int	i;
 
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
-int	precise_time(void)
-{
-	static struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000000 + tv.tv_usec);
+	i = -1;
+	while (++i < env->philos_numb)
+	{
+		philos[i].pid = fork();
+		if (!philos[i].pid)
+		{
+			philo_cycle(&philos[i]);
+			exit(0);
+		}
+	}
 }

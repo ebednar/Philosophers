@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 23:01:46 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/19 23:01:58 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/20 20:08:15 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,7 @@ void		*obsever_cycle(void *philo_ptr)
 		}
 		check_end(philo);
 	}
+	while (1)
+		;
 	return (0);
 }

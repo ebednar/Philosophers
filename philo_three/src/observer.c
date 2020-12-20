@@ -6,13 +6,13 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 22:47:10 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/19 21:50:08 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/20 14:40:02 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-void	*observer_eat_count(void *env_ptr)
+void		*observer_eat_count(void *env_ptr)
 {
 	t_env	*env;
 	int		i;
@@ -32,7 +32,19 @@ void	*observer_eat_count(void *env_ptr)
 	return (0);
 }
 
-void	*observer_cycle(void *philo_ptr)
+static int	check_end(t_philo *philo)
+{
+	if (philo->time_left <= 0)
+	{
+		sem_wait(philo->philo_s);
+		print_message(philo, " died");
+		sem_post(philo->env->running);
+		return (1);
+	}
+	return (0);
+}
+
+void		*observer_cycle(void *philo_ptr)
 {
 	t_philo *philo;
 	int		old_time;
@@ -48,13 +60,8 @@ void	*observer_cycle(void *philo_ptr)
 		old_time = current_time;
 		if (!philo->eating)
 			philo->time_left -= delta_time;
-		if (philo->time_left <= 0)
-		{
-			sem_wait(philo->philo_s);
-			print_message(philo, " died");
-			sem_post(philo->env->running);
+		if (check_end(philo))
 			return (0);
-		}
 		if (philo->number_of_eat == 0)
 		{
 			sem_wait(philo->philo_s);

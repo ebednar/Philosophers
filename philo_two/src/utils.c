@@ -6,13 +6,13 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 18:38:18 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/19 23:03:56 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/20 14:43:51 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int		ft_atoi(const char *str)
+int			ft_atoi(const char *str)
 {
 	int			i;
 	long long	res;
@@ -41,12 +41,12 @@ int		ft_atoi(const char *str)
 	return (res * sign);
 }
 
-void	ft_putchar(char c)
+void		ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-void	ft_putstr(char const *s)
+void		ft_putstr(char const *s)
 {
 	int	i;
 
@@ -60,7 +60,7 @@ void	ft_putstr(char const *s)
 	}
 }
 
-void	ft_putendl(char const *s)
+void		ft_putendl(char const *s)
 {
 	if (s == NULL)
 		return ;
@@ -68,7 +68,7 @@ void	ft_putendl(char const *s)
 	ft_putchar('\n');
 }
 
-void	ft_putnbr(int n)
+void		ft_putnbr(int n)
 {
 	if (n == -2147483648)
 	{

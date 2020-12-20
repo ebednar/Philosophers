@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 18:12:12 by ebednar           #+#    #+#             */
-/*   Updated: 2020/11/23 20:56:10 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/20 14:06:46 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	start_threads(t_env *env, t_philo *philos)
 	if (!(threads = (pthread_t*)malloc(env->philos_numb * sizeof(pthread_t))))
 	{
 		ft_putendl("mem allocation error");
-			return ;
+		return ;
 	}
 	i = -1;
 	while (++i < env->philos_numb)
@@ -60,7 +60,7 @@ static void	start_threads(t_env *env, t_philo *philos)
 		if (pthread_create(&threads[i], NULL, philo_cycle, &philos[i]) != 0)
 		{
 			ft_putendl("pthread creation error");
-			free (threads);
+			free(threads);
 			return ;
 		}
 		pthread_detach(threads[i]);
@@ -75,7 +75,9 @@ static void	read_input(int argc, char **argv, t_env *env)
 {
 	if (argc != 5 && argc != 6)
 	{
-		ft_putendl("wrong number of args: number_of_philosophers, time_to_die, time_to_eat, time_to_sleep,[number_of_times_each_philosopher_must_eat]");
+		ft_putendl("wrong number of args: number_of_philosophers,\
+		time_to_die, time_to_eat, time_to_sleep, \
+		[number_of_times_each_philosopher_must_eat]");
 		return ;
 	}
 	env->philos_numb = ft_atoi(argv[1]);
@@ -107,10 +109,11 @@ int			main(int argc, char **argv)
 		ft_putendl("mem allocation error");
 		return (-1);
 	}
-	if (!(env.forks = (pthread_mutex_t *)malloc((env.philos_numb) * sizeof(pthread_mutex_t))))
+	if (!(env.forks = (pthread_mutex_t *)malloc((env.philos_numb) *
+	sizeof(pthread_mutex_t))))
 	{
 		ft_putendl("mem allocation error");
-		free (philos);
+		free(philos);
 		return (-1);
 	}
 	set_philos(&env, philos);

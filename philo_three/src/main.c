@@ -6,7 +6,7 @@
 /*   By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 18:12:12 by ebednar           #+#    #+#             */
-/*   Updated: 2020/12/19 21:29:27 by ebednar          ###   ########.fr       */
+/*   Updated: 2020/12/20 17:05:33 by ebednar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	set_philos(t_env *env, t_philo *philos)
 		{
 			ft_putendl("semaphore open fail");
 			return (1);
-		};
+		}
 	}
 	return (0);
 }
@@ -60,16 +60,7 @@ static void	start_threads(t_env *env, t_philo *philos)
 		return ;
 	}
 	pthread_detach(observer);
-	i = -1;
-	while (++i < env->philos_numb)
-	{
-		philos[i].pid = fork();
-		if (!philos[i].pid)
-		{
-			philo_cycle(&philos[i]);
-			exit(0);
-		}
-	}
+	fork_process(env, philos);
 	sem_wait(env->running);
 	i = -1;
 	while (++i < env->philos_numb)
@@ -81,7 +72,9 @@ static int	read_input(int argc, char **argv, t_env *env)
 {
 	if (argc != 5 && argc != 6)
 	{
-		ft_putendl("wrong number of args: number_of_philosophers, time_to_die, time_to_eat, time_to_sleep,[number_of_times_each_philosopher_must_eat]");
+		ft_putendl("wrong number of args: number_of_philosophers, \
+		time_to_die, time_to_eat, time_to_sleep,\
+		[number_of_times_each_philosopher_must_eat]");
 		return (1);
 	}
 	env->philos_numb = ft_atoi(argv[1]);

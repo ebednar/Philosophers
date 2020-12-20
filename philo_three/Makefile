@@ -6,7 +6,7 @@
 #    By: ebednar <ebednar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/22 18:09:43 by ebednar           #+#    #+#              #
-#    Updated: 2020/11/23 20:42:02 by ebednar          ###   ########.fr        #
+#    Updated: 2020/12/20 19:42:12 by ebednar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRC =	./src/main.c \
 		./src/timer.c \
 		./src/utils.c \
 		./src/print.c \
-		./src/sem_init.c
+		./src/sem_init.c \
+		./src/fork_process.c
 OBJECTS = $(SRC:.c=.o)
 FLAGS = -Wall -Wextra -Werror
 INCLUDES = -I include
